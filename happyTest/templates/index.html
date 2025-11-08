@@ -5,10 +5,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>행복테스트</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
-    테스트
+    <div class="container container-sm">
+        <div class="startpage">
+            시작화면
+            <span>{{ result_len }}명 참여했어요!</span>
+            <button>시작하기 </button>
+        </div>
+        <form id="HappyTest" method="POST">
+            {% csrf_token %}
+            <!-- 프로그래스바 -->
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+
+            <!-- 질문 컨텐츠 -->
+            <div class="main_test">
+                {% for q in question %}
+                <div class="content">
+                    <h3>Q. {{q.text}}</h3>
+                    {% for i in q.options.all %}
+                    <label for="{{i.pk}}">
+                        <input type="radio" id="{{i.pk}}" name="{{i.type}}_{{q.id}}" value="{{i.score}}"
+                            data-type="{{i.type}}">
+                        {{i.text}}<br />
+                    </label>
+                    {% endfor %}
+
+                </div>
+                {% endfor %}
+                <!-- 버튼들 -->
+                <div class="button_dom">
+                    <button type="button" class="prev-btn">이전</button>
+                    <button type="button" class="next-btn">다음</button>
+                    <button type="button" class="submit-btn">결과보기</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
 </body>
+<style>
+    * {
+        --main-color: #623aa2;
+    }
+
+    .startpage {
+        background-color: pink;
+    }
+
+    .main_test {
+        min-height: 100vh;
+        overflow: scroll;
+    }
+
+    #progress-container {
+        width: 100%;
+        background: #eee;
+        height: 20px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    #progress-bar {
+        width: 0%;
+        height: 100%;
+        background: var(--main-color);
+        border-radius: 10px;
+        transition: all 0.5s ease-in-out;
+    }
+
+    .button_dom {
+        display: flex;
+        gap: 5px;
+        margin-top: 10px;
+        justify-content: center;
+    }
+
+    .button_dom button {
+        flex: 1;
+        background-color: var(--main-color);
+        border-radius: 2px;
+        border: none;
+        color: white;
+        padding: 4px 0px;
+        cursor: pointer;
+        transition: all 0.5s ease-in-out;
+        opacity: .4;
+    }
+
+    .button_dom button:hover {
+        opacity: 1;
+    }
+</style>
+<script>
+    // 시작화면 
+
+    const contents = document.querySelectorAll(".content");
+    const content_len = contents.length;
+
+    const prevBtn = document.querySelector(".prev-btn");
+    const nextBtn = document.querySelector(".next-btn");
+    const submitBtn = document.querySelector(".submit-btn");
+
+    // 현재 내 페이지 알기
+    let currentIndex = 0;
+
+    // 초기화: 첫 번째 content만 보여주기
+    function showContent(index) {
+        contents.forEach((c, i) => {
+            c.style.display = i === index ? "block" : "none";
+        });
+        // 버튼 상태 업데이트
+        updateButton(index)
+        // 상태바 
+        updateProgress(index);
+    }
+    // 버튼 상태 업데이트
+    function updateButton(index) {
+        if (index == 0) {
+            prevBtn.style.display = "none";
+            nextBtn.style.display = "block";
+            submitBtn.style.display = "none";
+        } else if (index == (content_len - 1)) {
+            prevBtn.style.display = "block";
+            nextBtn.style.display = "none";
+            submitBtn.style.display = "block";
+        } else {
+            submitBtn.style.display = "none";
+            prevBtn.style.display = "block";
+            nextBtn.style.display = "block";
+        }
+
+
+
+    }
+
+    // 상태바 업데이트
+    function updateProgress(index) {
+        const progress = (index / content_len) * 100;
+        document.getElementById("progress-bar").style.width = progress + "%";
+    }
+
+    // 이전 버튼 클릭
+    prevBtn.addEventListener("click", () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            showContent(currentIndex);
+        } else {
+            console.log("prevBtn", prevBtn)
+            console.log("this", this)
+        }
+    });
+
+    // 다음 버튼 클릭
+    nextBtn.addEventListener("click", () => {
+        let options = contents[currentIndex].querySelectorAll("input[type=radio]")
+        const checked = Array.from(options).some(i => i.checked);
+        // 해당 컨텐츠의 radio input 을 모두 가져온다
+        // 선택된게 없으면
+        if (!checked) {
+            Toastify({
+                text: "항목을 선택해주세요",
+                className: "alert",
+                duration: 1000,
+                style: {
+                    background: "linear-gradient(to right, #f97794, #623aa2)",
+                    borderRadius: "10px"
+                },
+                position: "center",
+            }).showToast();
+            // 빠져나온다.
+            return false;
+        }
+
+        if (currentIndex < content_len - 1) {
+            currentIndex++;
+            showContent(currentIndex);
+        }
+    });
+
+    // 결과보기 버튼 이벤트
+    submitBtn.addEventListener("click", () => {
+        let options = contents[currentIndex].querySelectorAll("input[type=radio]")
+        const checked = Array.from(options).some(i => i.checked);
+        // 해당 컨텐츠의 radio input 을 모두 가져온다
+        // 선택된게 없으면
+        if (!checked) {
+            Toastify({
+                text: "항목을 선택해주세요",
+                className: "alert",
+                duration: 1000,
+                style: {
+                    background: "linear-gradient(to right, #f97794, #623aa2)",
+                    borderRadius: "10px"
+                },
+                position: "center",
+            }).showToast();
+            // 빠져나온다.
+            return false;
+        }
+        // 총 점수 구해서 데이터에 보내야함
+        function score(type) {
+            const score = [...document.querySelectorAll(`input[data-type="${type}"]:checked`)].reduce((acc, el) => acc + Number(el.value), 0);
+            return Number(score);
+        }
+
+        total_score = [...document.querySelectorAll(`input:checked`)].reduce((acc, el) => acc + Number(el.value), 0);
+        const context = {
+            age: 10,
+            a_type_score: score("a"),
+            b_type_score: score("b"),
+            c_type_score: score("c"),
+            d_type_score: score("d"),
+            e_type_score: score("e"),
+            f_type_score: score("f"),
+            total_score: total_score,
+        };
+
+        fetch("/save/1/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify(context)
+        })
+            .then(res => {
+                console.log(res);
+                return res.json();
+            })
+            .then(data => {
+                window.location = data.url
+            })
+    })
+
+    // 선택을 해야 다음 버튼이 활성화 되게끔
+    // 초기화 실행
+    showContent(currentIndex);
+</script>
 
 </html>
