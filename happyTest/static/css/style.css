@@ -12,11 +12,14 @@
 }
 
 body {
+    background-color: var(--main-color);
     overflow-x: hidden;
 }
-
+body:has(.main_test) {
+    color: #131313;
+    background-color: var(--background-color);
+}
 body:has(.result_report) {
-    background-color: var(--main-color);
     color: white;
 }
 #myChart {
