@@ -44,6 +44,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 #DEBUG = True
 DEBUG = False
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     'de05164.pythonanywhere.com'
 ]
 

@@ -7,7 +7,9 @@
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
     </script>
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
 <div class="container container-sm">
+
     <div class="result_report">
         <h3 class="title"> 당신의 행복 점수는?</h3>
         <h1>{{result.total_score}}점</h1>
@@ -28,7 +30,7 @@
                     <img src="{{i.thumbnail_url|safe}}" class="card-img-top" alt="...">
                     {% endif %}
                     <div class="card-body">
-                        <p class="card-title">{{i.title|safe|truncatewords:10}}</p>
+                        <p class="card-title">{{i.title|safe|truncatechars:30}}</p>
                     </div>
                 </div>
             </a>
@@ -44,8 +46,35 @@
         </div>
     </div>
 </div>
-
+<div class="area">
+    <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    type_a = Number('{{result.final_a_type_score}}')
+    type_b = Number('{{result.final_b_type_score}}')
+    type_c = Number('{{result.final_c_type_score}}')
+    type_d = Number('{{result.final_d_type_score}}')
+    type_e = Number('{{result.final_e_type_score}}')
+    type_f = Number('{{result.final_f_type_score}}')
+    console.log("type_a", type_a)
+    console.log("type_b", type_b)
+    console.log("type_c", type_c)
+    console.log("type_d", type_d)
+    console.log("type_e", type_e)
+    console.log("type_f", type_f)
+</script>
 <script>
     const ctx = document.getElementById('myChart');
 
@@ -54,15 +83,15 @@
         data: {
             datasets: [{
                 label: 'First dataset',
-                data: [20, 20, 40, 50, 50]
+                data: [type_a, type_b, type_c, type_d, type_e, type_f]
             }],
-            labels: ['1', '2', '3', '4', '5']
+            labels: ['a', 'b', 'c', 'd', 'e', 'f']
         },
         options: {
             scales: {
                 r: {
                     suggestedMin: 0,
-                    suggestedMax: 100
+                    suggestedMax: 30,
                 }
             }
         }

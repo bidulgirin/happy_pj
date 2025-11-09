@@ -5,7 +5,6 @@ from happyTest.models import HappyTest, Question, Option, Result, VideoSolution 
 from django.core.exceptions import ValidationError
 
 ## 필요한 모듈 import~ 
-
 # 
 import time
 import requests
@@ -34,7 +33,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 def start(request):
     # 전달할것
     # 총참여수, 질문, 질문옵션들
-    questions = Question.objects.filter(happy_test__id=1).order_by("id")
+    questions = Question.objects.filter(happy_test_id=1).order_by("id")
     result_len = Result.objects.count()
     context = {
         "question" : questions,
@@ -100,29 +99,30 @@ def save(request, q_id):
 # 결과 페이지    
 def result(request, id):
     result = Result.objects.get(id=id)
-    solution = VideoSolution.objects.all()
+    age = 0
+    keyword = "인간관계"
     # 좋음 보통 나쁨으로 10대, 20대, 30대...에 따라 다른 데이터
+    if result.age == 10:
+        pass
+    elif result.age == 20:
+        pass
+    elif result.age == 30:
+        pass
+    elif result.age == 40:
+        pass
+    elif result.age == 50:
+        pass
+    elif result.age == 60:
+        pass
+    elif result.age == 70:
+        pass
+    elif result.age >= 80:
+        pass
+        
     # 나쁨
     if result.total_score < 50:
-        text = "행복지수가낮아요"
-        if result.age == 10:
-            pass
-        elif result.age == 20:
-            pass
-        elif result.age == 30:
-            pass
-        elif result.age == 40:
-            pass
-        elif result.age == 50:
-            pass
-        elif result.age == 60:
-            pass
-        elif result.age == 70:
-            pass
-        elif result.age >= 80:
-            pass
+        text = "행복지수가 평균보다 낮아요"
         
-        print("solutions", solution)
     # 보통
     elif result.total_score < 70 :
          text = "행복지수가 보통이에요"
@@ -130,11 +130,14 @@ def result(request, id):
     else:
         text = "행복지수가 높아요"
     
+    # 연령대별 키워드별 필터링
+    solution = VideoSolution.objects.all()[:20]
+    
     
     # 결과에 따라 솔루션 데이터 달라짐
     context = {
         "result" : result,
-        "solutions" : solution[:10],
+        "solutions" : solution,
         "text" : text,
     }
     
@@ -201,11 +204,9 @@ def vidio_solution(request):
         time.sleep(wait_time + 5)
         
         driver.execute_script("document.body.style.zoom='10%'")# 이 구세주다...아....아....
-        # 꽃 같은 화면 로딩을 해결하는 좋은 수단 이었습니다...
-
         # 영싱들을 수집합니다...
         # 3000px 만 스크롤
-        finish_line = 1000
+        finish_line = 800
         last_page_height = driver.execute_script("return document.documentElement.scrollHeight")
 
         while True:
@@ -233,15 +234,17 @@ def vidio_solution(request):
         for video in video_list:
             # 장고에서 VideoSolution 라는 모델에 넣을것들 선언하고 모델 객체를 넣어야 bulk_create 가능~~
             try: 
-                datas.append(
-                    VideoSolution(
-                        keyword = keyword,
-                        age = age,
-                        title = video.select_one("a#video-title").get_text().strip(),
-                        video_url = url + video.select_one("a#thumbnail").get("href",""),
-                        thumbnail_url = video.select_one("a#thumbnail img.ytCoreImageHost").get("src",None),
+                thumbnail_url_dom = video.select_one("a#thumbnail img.ytCoreImageHost").get("src",None)
+                if thumbnail_url_dom:
+                    datas.append(
+                        VideoSolution(
+                            keyword = keyword,
+                            age = age,
+                            title = video.select_one("a#video-title").get_text().strip(),
+                            video_url = url + video.select_one("a#thumbnail").get("href",""),
+                            thumbnail_url = thumbnail_url_dom,
+                        )
                     )
-                )
             except:
                 print("악!")
                 
@@ -257,3 +260,70 @@ def vidio_solution(request):
         return render(request, "./solution_page.html", context)
 
     return render(request, "./solution_page.html")
+
+# 책 솔루션 크롤링하는함수
+
+# 질문 크롤링하는 함수(등록하는게더빠를듯?)
+def option_create(request):
+    if request.method == "POST":
+        # 질문내용
+        title = request.POST["title"]
+        # 정방향인지 역방향인지
+        score = int(request.POST["score"])
+        option_type = request.POST["type"]
+        option_list = ["매우그렇다","그렇다","보통이다","아니다","매우아니다"]
+        
+        # Question 에 다가 먼저 질문내용을 넣습니다
+        question = Question.objects.create(
+            happy_test = HappyTest.objects.get(id=1),
+            text = title,
+        )
+        question.save()
+        
+        options = []
+        
+        # 정방향으로
+        if score == 0:
+            option_score_list = [0,1,2,3,4]
+        # 역방향으로    
+        else:
+            option_score_list = [4,3,2,1,0]
+            
+        for idx, i in enumerate(option_list):
+            options.append(
+                Option(
+                   question = Question.objects.get(id=question.id), 
+                   text = i, 
+                   score = option_score_list[idx], 
+                   type = option_type, 
+                )
+            )
+            
+        Option.objects.bulk_create(options)
+        
+    question = Question.objects.filter(happy_test_id = 1) 
+    context = {
+        "question" : question
+    }
+    return render(request, "./option_create.html", context)
+ # quetion 수정 삭제
+ 
+def quetion_update(request,id):
+    text = request.POST["text"]
+    Question.objects.filter(id=id).update(text=text)
+    return redirect("option_create")
+
+def quetion_delete(request,id):
+    Question.objects.get(id=id).delete()
+    return redirect("option_create")
+
+def option_update(request,id):
+    text = request.POST.get("text")
+    score = request.POST.get("score")
+    Option.objects.filter(id=id).update(text=text, score=score)
+    
+    return redirect("option_create")
+# option 수정 삭제
+def option_delete(request,id):
+    Option.objects.get(id=id).delete()
+    return redirect("option_create")

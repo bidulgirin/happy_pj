@@ -16,7 +16,6 @@
 </div>
 
 <div class="container container-sm">
-
     <form id="HappyTest" method="POST">
         {% csrf_token %}
         <!-- 프로그래스바 -->
@@ -52,11 +51,12 @@
 <script>
     // 시작화면 
     const start_content = document.querySelector(".startpage .start_content");
-    let fill = "#19183B";
+    let fill = "#6861e8";
     let after_fill = "#fff";
     start_content.addEventListener("click", () => {
         document.querySelector(`[fill='${fill}']`).style.transition = "all 1s"
         document.querySelector(`[fill='${fill}']`).setAttribute('fill', after_fill)
+        document.querySelector(`body`).style.backgroundColor = after_fill
         // 예쁘게 사라지세요~
         document.querySelector(".startpage").className += ' gone'
 
