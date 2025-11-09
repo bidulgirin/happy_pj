@@ -1,0 +1,198 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- Enhanced background gradient with Barfield-inspired warmth -->
+        <radialGradient id="bgGradient" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" style="stop-color:#f8f4e8;stop-opacity:1" />
+            <stop offset="40%" style="stop-color:#f2e8d0;stop-opacity:1" />
+            <stop offset="80%" style="stop-color:#e8dcc6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#d4c4a0;stop-opacity:1" />
+        </radialGradient>
+
+        <!-- Richer color palette inspired by the diagrams -->
+        <radialGradient id="centerGlow" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" style="stop-color:#f4d03f;stop-opacity:0.9" />
+            <stop offset="50%" style="stop-color:#e8a317;stop-opacity:0.7" />
+            <stop offset="100%" style="stop-color:#d68910;stop-opacity:0.5" />
+        </radialGradient>
+
+        <!-- Node colors from the diagrams -->
+        <radialGradient id="blueNode" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#5dade2;stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#2980b9;stop-opacity:0.9" />
+        </radialGradient>
+
+        <radialGradient id="greenNode" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#58d68d;stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#27ae60;stop-opacity:0.9" />
+        </radialGradient>
+
+        <radialGradient id="orangeNode" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#f39c12;stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#e67e22;stop-opacity:0.9" />
+        </radialGradient>
+
+        <radialGradient id="purpleNode" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" style="stop-color:#af7ac5;stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#8e44ad;stop-opacity:0.9" />
+        </radialGradient>
+
+        <!-- Flowing connection gradients -->
+        <linearGradient id="flowConnection" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#5dade2;stop-opacity:0.4" />
+            <stop offset="25%" style="stop-color:#58d68d;stop-opacity:0.5" />
+            <stop offset="50%" style="stop-color:#f39c12;stop-opacity:0.4" />
+            <stop offset="75%" style="stop-color:#af7ac5;stop-opacity:0.5" />
+            <stop offset="100%" style="stop-color:#5dade2;stop-opacity:0.4" />
+        </linearGradient>
+
+        <!-- Gentle glow filter -->
+        <filter id="softGlow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+
+    <!-- Background -->
+    <rect width="400" height="400" fill="#19183B" />
+
+    <!-- Subtle edge whispers with richer colors -->
+    <g opacity="0.06">
+        <rect x="0" y="0" width="15" height="400" fill="#5dade2">
+            <animate attributeName="opacity" values="0.03;0.1;0.03" dur="8s" repeatCount="indefinite" />
+        </rect>
+        <rect x="385" y="0" width="15" height="400" fill="#f39c12">
+            <animate attributeName="opacity" values="0.03;0.1;0.03" dur="8s" begin="2s" repeatCount="indefinite" />
+        </rect>
+        <rect x="0" y="0" width="400" height="15" fill="#58d68d">
+            <animate attributeName="opacity" values="0.03;0.1;0.03" dur="8s" begin="4s" repeatCount="indefinite" />
+        </rect>
+        <rect x="0" y="385" width="400" height="15" fill="#af7ac5">
+            <animate attributeName="opacity" values="0.03;0.1;0.03" dur="8s" begin="6s" repeatCount="indefinite" />
+        </rect>
+    </g>
+
+    <!-- Central breathing awareness core -->
+    <g transform="translate(200,200)">
+        <circle cx="0" cy="0" r="30" fill="url(#centerGlow)" filter="url(#softGlow)">
+            <animate attributeName="r" values="25;45;25" dur="5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.7;1;0.7" dur="5s" repeatCount="indefinite" />
+        </circle>
+
+        <!-- Inner light - childlike wonder -->
+        <circle cx="0" cy="0" r="15" fill="#f8f4e8" opacity="0.8">
+            <animate attributeName="r" values="12;22;12" dur="5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.6;0.9;0.6" dur="5s" repeatCount="indefinite" />
+        </circle>
+    </g>
+
+    <!-- 8-Point Organic Flow Pattern -->
+    <g transform="translate(200,200)" opacity="0.8">
+        <!-- Top -->
+        <g>
+            <circle cx="0" cy="-90" r="18" fill="url(#blueNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="14;24;14" dur="6s" begin="0s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="0s" repeatCount="indefinite" />
+            </circle>
+            <path d="M 0,-70 Q 0,-50 0,-35" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="0s" repeatCount="indefinite" />
+            </path>
+        </g>
+
+        <!-- Top-Right -->
+        <g>
+            <circle cx="64" cy="-64" r="16" fill="url(#greenNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="12;22;12" dur="6s" begin="0.75s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="0.75s" repeatCount="indefinite" />
+            </circle>
+            <path d="M 50,-50 Q 35,-35 25,-25" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="0.75s" repeatCount="indefinite" />
+            </path>
+        </g>
+
+        <!-- Right -->
+        <g>
+            <circle cx="90" cy="0" r="17" fill="url(#orangeNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="13;23;13" dur="6s" begin="1.5s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="1.5s" repeatCount="indefinite" />
+            </circle>
+            <path d="M 70,0 Q 50,0 35,0" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="1.5s" repeatCount="indefinite" />
+            </path>
+        </g>
+
+        <!-- Bottom-Right -->
+        <g>
+            <circle cx="64" cy="64" r="15" fill="url(#purpleNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="11;21;11" dur="6s" begin="2.25s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="2.25s" repeatCount="indefinite" />
+            </circle>
+            <path d="M 50,50 Q 35,35 25,25" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="2.25s" repeatCount="indefinite" />
+            </path>
+        </g>
+
+        <!-- Bottom -->
+        <g>
+            <circle cx="0" cy="90" r="19" fill="url(#blueNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="15;25;15" dur="6s" begin="3s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="3s" repeatCount="indefinite" />
+            </circle>
+            <path d="M 0,70 Q 0,50 0,35" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="3s" repeatCount="indefinite" />
+            </path>
+        </g>
+
+        <!-- Bottom-Left -->
+        <g>
+            <circle cx="-64" cy="64" r="16" fill="url(#greenNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="12;22;12" dur="6s" begin="3.75s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="3.75s" repeatCount="indefinite" />
+            </circle>
+            <path d="M -50,50 Q -35,35 -25,25" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="3.75s" repeatCount="indefinite" />
+            </path>
+        </g>
+
+        <!-- Left -->
+        <g>
+            <circle cx="-90" cy="0" r="17" fill="url(#orangeNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="13;23;13" dur="6s" begin="4.5s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="4.5s" repeatCount="indefinite" />
+            </circle>
+            <path d="M -70,0 Q -50,0 -35,0" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="4.5s" repeatCount="indefinite" />
+            </path>
+        </g>
+
+        <!-- Top-Left -->
+        <g>
+            <circle cx="-64" cy="-64" r="15" fill="url(#purpleNode)" filter="url(#softGlow)">
+                <animate attributeName="r" values="11;21;11" dur="6s" begin="5.25s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.6;1;0.6" dur="6s" begin="5.25s" repeatCount="indefinite" />
+            </circle>
+            <path d="M -50,-50 Q -35,-35 -25,-25" stroke="url(#flowConnection)" stroke-width="2" fill="none">
+                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="6s" begin="5.25s" repeatCount="indefinite" />
+            </path>
+        </g>
+    </g>
+
+    <!-- Outer awareness ripples -->
+    <g opacity="0.25">
+        <circle cx="200" cy="200" r="200" fill="none" stroke="#5dade2" stroke-width="0.5">
+            <animate attributeName="r" values="180;220;180" dur="8s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.1;0.3;0.1" dur="8s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="200" cy="200" r="160" fill="none" stroke="#f39c12" stroke-width="0.5">
+            <animate attributeName="r" values="140;180;140" dur="8s" begin="2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.1;0.3;0.1" dur="8s" begin="2s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="200" cy="200" r="120" fill="none" stroke="#58d68d" stroke-width="0.5">
+            <animate attributeName="r" values="100;140;100" dur="8s" begin="4s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.1;0.3;0.1" dur="8s" begin="4s" repeatCount="indefinite" />
+        </circle>
+    </g>
+
+</svg>

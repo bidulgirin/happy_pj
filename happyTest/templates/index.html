@@ -1,115 +1,73 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>행복테스트</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-</head>
-
-<body>
-    <div class="container container-sm">
-        <div class="startpage">
-            시작화면
-            <span>{{ result_len }}명 참여했어요!</span>
-            <button>시작하기 </button>
-        </div>
-        <form id="HappyTest" method="POST">
-            {% csrf_token %}
-            <!-- 프로그래스바 -->
-            <div id="progress-container">
-                <div id="progress-bar"></div>
-            </div>
-
-            <!-- 질문 컨텐츠 -->
-            <div class="main_test">
-                {% for q in question %}
-                <div class="content">
-                    <h3>Q. {{q.text}}</h3>
-                    {% for i in q.options.all %}
-                    <label for="{{i.pk}}">
-                        <input type="radio" id="{{i.pk}}" name="{{i.type}}_{{q.id}}" value="{{i.score}}"
-                            data-type="{{i.type}}">
-                        {{i.text}}<br />
-                    </label>
-                    {% endfor %}
-
-                </div>
-                {% endfor %}
-                <!-- 버튼들 -->
-                <div class="button_dom">
-                    <button type="button" class="prev-btn">이전</button>
-                    <button type="button" class="next-btn">다음</button>
-                    <button type="button" class="submit-btn">결과보기</button>
-                </div>
-            </div>
-
-        </form>
+{% extends './common/common.html' %}
+{% load static %}
+{% block contents %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="startpage">
+    <div class="title">
+        <p>행복 테스트</p>
+        <p>총 {{ result_len }}명 참여했어요!</p>
     </div>
+    <div class="start_content">
+        시작하기
+    </div>
+    <div class="start_background">
+        {% include './svg.html' %}
+    </div>
+</div>
 
-</body>
-<style>
-    * {
-        --main-color: #623aa2;
-    }
+<div class="container container-sm">
 
-    .startpage {
-        background-color: pink;
-    }
+    <form id="HappyTest" method="POST">
+        {% csrf_token %}
+        <!-- 프로그래스바 -->
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
 
-    .main_test {
-        min-height: 100vh;
-        overflow: scroll;
-    }
+        <!-- 질문 컨텐츠 -->
+        <div class="main_test">
+            {% for q in question %}
+            <div class="content">
+                <h3>Q. {{q.text}}</h3>
+                {% for i in q.options.all %}
+                <label for="{{i.pk}}">
+                    <input type="radio" id="{{i.pk}}" name="{{i.type}}_{{q.id}}" value="{{i.score}}"
+                        data-type="{{i.type}}">
+                    {{i.text}}<br />
+                </label>
+                {% endfor %}
 
-    #progress-container {
-        width: 100%;
-        background: #eee;
-        height: 20px;
-        border-radius: 10px;
-        margin-top: 10px;
-    }
+            </div>
+            {% endfor %}
+            <!-- 버튼들 -->
+            <div class="button_dom">
+                <button type="button" class="prev-btn">이전</button>
+                <button type="button" class="next-btn">다음</button>
+                <button type="button" class="submit-btn">결과보기</button>
+            </div>
+        </div>
 
-    #progress-bar {
-        width: 0%;
-        height: 100%;
-        background: var(--main-color);
-        border-radius: 10px;
-        transition: all 0.5s ease-in-out;
-    }
-
-    .button_dom {
-        display: flex;
-        gap: 5px;
-        margin-top: 10px;
-        justify-content: center;
-    }
-
-    .button_dom button {
-        flex: 1;
-        background-color: var(--main-color);
-        border-radius: 2px;
-        border: none;
-        color: white;
-        padding: 4px 0px;
-        cursor: pointer;
-        transition: all 0.5s ease-in-out;
-        opacity: .4;
-    }
-
-    .button_dom button:hover {
-        opacity: 1;
-    }
-</style>
+    </form>
+</div>
 <script>
     // 시작화면 
+    const start_content = document.querySelector(".startpage .start_content");
+    let fill = "#19183B";
+    let after_fill = "#fff";
+    start_content.addEventListener("click", () => {
+        document.querySelector(`[fill='${fill}']`).style.transition = "all 1s"
+        document.querySelector(`[fill='${fill}']`).setAttribute('fill', after_fill)
+        // 예쁘게 사라지세요~
+        document.querySelector(".startpage").className += ' gone'
+
+        setTimeout(function () {
+            document.querySelector(".startpage").style.display = "none";
+        }, 1000);
+
+    })
 
     const contents = document.querySelectorAll(".content");
     const content_len = contents.length;
-
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
     const submitBtn = document.querySelector(".submit-btn");
@@ -250,5 +208,4 @@
     // 초기화 실행
     showContent(currentIndex);
 </script>
-
-</html>
+{% endblock %}

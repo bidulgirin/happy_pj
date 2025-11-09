@@ -1,0 +1,170 @@
+/* https://codepen.io/jkantner/pen/qEbPWaW */
+* {
+    --main-color: #19183b;
+    --background-color: #e7f2ef;
+    --point-color: #a1c2bd;
+    --point-color2: #708993;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+body:has(.result_report) {
+    background-color: var(--main-color);
+    color: white;
+}
+#myChart {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.startpage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden;
+    opacity: 1;
+    transition: all 1s;
+}
+
+.startpage.gone {
+    opacity: 0;
+}
+
+.startpage .start_background {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.startpage .start_background svg {
+    width: 100%;
+    height: 100vh;
+    transform: scale(180%);
+}
+
+.startpage .start_content {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 3;
+    z-index: 3;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.startpage .title {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    justify-self: start;
+    color: var(--background-color);
+    line-height: 1rem;
+}
+
+.startpage .title p:nth-child(1) {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.main_test {
+    min-height: 100vh;
+}
+
+.main_test h3 {
+    text-align: center;
+    margin-bottom: 10%;
+}
+
+#progress-container {
+    width: 100%;
+    background: #eee;
+    height: 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--main-color);
+    border-radius: 10px;
+    transition: all 0.5s ease-in-out;
+}
+
+.button_dom {
+    display: flex;
+    gap: 5px;
+    margin-top: 8%;
+    justify-content: center;
+}
+
+.button_dom button {
+    flex: 1;
+    background-color: var(--main-color);
+    border-radius: 2px;
+    border: none;
+    color: white;
+    padding: 8px 0px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    opacity: 0.4;
+}
+
+.button_dom button:hover {
+    opacity: 1;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.result_report,
+.solution {
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.solution_datas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1%;
+    justify-content: center;
+}
+.solution_datas > a {
+    width: 48%;
+}
+
+.solution_datas > a .card {
+    display: block;
+    flex: 1;
+    min-height: 30vh;
+    max-height: 30vh;
+    margin-bottom: 10px;
+}
+.solution_datas > a .card .card-title {
+    font-size: 1rem;
+    text-decoration: none;
+    text-decoration-line: none;
+    line-height: 1.2rem;
+}

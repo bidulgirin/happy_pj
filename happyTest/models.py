@@ -66,6 +66,7 @@ class Result(models.Model): # 몇명이 참여했는지 표기할것임
     
 # 솔루션데이터!!! 데이터 수집!!!
 class VideoSolution(models.Model):
+    keyword = models.CharField("키워드", max_length=30, blank=True, null=True)
     title = models.CharField("제목", max_length=200)
     age =  models.IntegerField("나이", default=0)
     video_url = models.URLField("영상 링크")
@@ -76,11 +77,12 @@ class VideoSolution(models.Model):
         return self.title
     
 class BookSolution(models.Model):
+    keyword = models.CharField("키워드", max_length=30, blank=True, null=True)
     title = models.CharField("제목", max_length=200)
     age =  models.IntegerField("나이", default=0)
     book_url = models.URLField("링크")
     cover_url = models.URLField("사진 링크", blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)  # 등록 시간
+    created_at = models.DateTimeField(auto_now_add=True) 
 
     def __str__(self):
         return self.title

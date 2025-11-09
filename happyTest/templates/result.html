@@ -1,72 +1,73 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-    <title>내 행복지수는?</title>
-</head>
-
-<body>
-    <div class="container container-sm">
-        <div class="result_report">
-            <h3> 당신의 총 점수는?</h3>
-
-            <h1>{{result.total_score}}점</h1>
-            <canvas id="myChart"></canvas>
-
-
-
-            <p>{{text}}</p>
-        </div>
-
-
-        <h3>추천 영상</h3>
-        {% for i in solutions %}
-        <a href="{{i.video_url}}">
-            <div class="card">
-                <img src="{{i.thumbnail_url}}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">{{i.title}}</h5>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
+{% extends './common/common.html' %}
+{% load static %}
+{% block contents %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+    </script>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<div class="container container-sm">
+    <div class="result_report">
+        <h3 class="title"> 당신의 행복 점수는?</h3>
+        <h1>{{result.total_score}}점</h1>
+        <p>{{text}}</p>
+        <canvas id="myChart"></canvas>
     </div>
+    <div class="solution">
+        <p class="title">행복을 위한 꿀팁!</p>
+        <p>✨추천 영상✨</p>
+        <div class="solution_datas">
+            {% if solutions.count > 0 %}
+            <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+            <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+            {% for i in solutions %}
+            <a href="{{i.video_url|safe}}" data-aos="fade-up">
+                <div class="card">
+                    {% if i.thumbnail_url %}
+                    <img src="{{i.thumbnail_url|safe}}" class="card-img-top" alt="...">
+                    {% endif %}
+                    <div class="card-body">
+                        <p class="card-title">{{i.title|safe|truncatewords:10}}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+            <script>
+                AOS.init();
+            </script>
+            {% else %}
+            <div>
+                솔루션 데이터를 준비중입니다
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('myChart');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('myChart');
 
-        let chart = new Chart(ctx, {
-            type: 'radar',
-            data: {
-                datasets: [{
-                    label: 'First dataset',
-                    data: [20, 20, 40, 50, 50]
-                }],
-                labels: ['1', '2', '3', '4', '5']
-            },
-            options: {
-                scales: {
-                    r: {
-                        suggestedMin: 0,
-                        suggestedMax: 100
-                    }
+    let chart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            datasets: [{
+                label: 'First dataset',
+                data: [20, 20, 40, 50, 50]
+            }],
+            labels: ['1', '2', '3', '4', '5']
+        },
+        options: {
+            scales: {
+                r: {
+                    suggestedMin: 0,
+                    suggestedMax: 100
                 }
             }
-        });
+        }
+    });
 
 
-    </script>
-</body>
-<style>
-
-</style>
-
-</html>
+</script>
+{% endblock %}
