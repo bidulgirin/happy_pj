@@ -28,7 +28,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 # 출처: https://mooonstar.tistory.com/entry/PythonBeautifulSoupbs4를-사용하여-웹-스크래핑하기 [MoonStar:티스토리]
 
-
 # 테스트페이지
 def start(request):
     # 전달할것
@@ -262,6 +261,107 @@ def vidio_solution(request):
     return render(request, "./solution_page.html")
 
 # 책 솔루션 크롤링하는함수
+def book_solution(request):
+    # 관리자 아니면 쫓아내기
+    user = request.user.is_authenticated  
+    if user:
+        print("관리자확인")
+    else:
+        return redirect("/")
+
+    if request.method == "POST": 
+        if request.POST["keyword"]:
+            keyword = request.POST["keyword"]
+            age = int(request.POST["age"])
+            
+        else:
+            return # 키워드 없으면 동작시키지 말어라~~
+        url = "https://product.kyobobook.co.kr/"
+
+        driver = webdriver.Chrome()
+        # 홈페이지 열것이야
+        driver.get(url=url)
+        # 기다리는 시간
+        wait_time = .8
+
+        # 살짝 기다려요
+        time.sleep(wait_time)
+
+        # 검색함
+        try : 
+            # 검색창 찾아요
+            element = driver.find_element(By.ID, 'searchKeyword')
+            # 기다려요
+            time.sleep(wait_time)
+            # 키워드 입력해요
+            element.send_keys(keyword)
+            # 검색어가 입력되는 시간 고려
+            time.sleep(wait_time)
+            # 엔터키 입력해요
+            element.send_keys(Keys.ENTER)
+            
+        except Exception as e:
+            print(e)
+
+        time.sleep(wait_time + 3)
+        #driver.execute_script("document.body.style.zoom='10%'")# 이 구세주다...아....아....
+        time.sleep(wait_time)
+
+        # 19세상품제외 필터를 하기위함
+        try : 
+            # 명시적대기
+            WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.ID, "exclAgeOver")))
+            filter_element = driver.find_element(By.ID, "exclAgeOver")
+            time.sleep(wait_time + 2)
+            filter_element.parent.click()
+        except Exception as e:
+            print(e)
+
+        time.sleep(wait_time + 5)
+         # 추천 필터가 있을경우
+        try :
+            elements = driver.find_element(By.CLASS_NAME, "filter_list_box").find_elements(By.ID, "recommend_category_filter")
+            time.sleep(wait_time + 2)
+            elements[0].click()
+        except Exception as e:
+            print(e)
+
+        time.sleep(wait_time + 5)
+       
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        soup = soup.body
+        # 책 리스트에서 값 뽑아올것임
+        book_list = soup.select("ul.prod_list li.prod_item")
+            
+        datas = []
+        if len(book_list) > 0:
+            for book  in book_list:
+            # 장고에서 VideoSolution 라는 모델에 넣을것들 선언하고 모델 객체를 넣어야 bulk_create 가능~~
+                try: 
+                    datas.append(
+                        BookSolution(
+                            keyword = keyword,
+                            age = age,
+                            title = book.select_one(".prod_name_group .prod_category + span").get_text().strip(),
+                            book_url = book.select_one(".prod_info").get("href", ""),
+                            cover_url = book.select_one(".prod_img_load").get("src", "")
+                        )
+                    )
+                except:
+                    print("악!")
+                    
+            # 모델에 한번에 저장 하이소
+            BookSolution.objects.bulk_create(datas)
+            
+            result_datas = BookSolution.objects.filter(keyword=keyword)
+
+            context = {
+                "result_datas" : result_datas
+            }
+            # 웹 드라이버 종료
+            driver.quit()
+            return render(request, "./solution_page.html", context)
+    return render(request, "./solution_page.html")
 
 # 질문 크롤링하는 함수(등록하는게더빠를듯?)
 def option_create(request):

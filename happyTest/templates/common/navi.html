@@ -1,3 +1,44 @@
-<div class="navi">
-    이것은 공통 네비다.
+{% block 'main_navi' %}
+<div class="main_navi">
+    <div class="main_navi_cont">
+        <h2><a href="/">관리자 모드</a></h2>
+        <div class="main_link">
+            <a href="{% url 'vidio_solution' %}">솔루션 크롤링</a>
+            <a href="{% url 'option_create' %}">질문 데이터</a>
+        </div>
+    </div>
 </div>
+<style>
+    .main_navi{
+        position: relative;
+        top:0;
+        left:0;
+        z-index: 101;
+        width: 100%;
+        padding: 0 20px;
+        background-color: black;
+        color:white;
+        box-sizing: border-box;
+    }
+    .main_navi a{
+        color: white;
+    }
+    .main_navi .main_navi_cont{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .main_link a{
+        text-decoration: none;
+        transition: color .3s;
+    }
+    .main_link a:hover{
+        color: rgb(91, 91, 255);
+    }
+    .main_link{
+        display: flex;
+        gap:10px;
+    }
+</style>
+{% endblock %}

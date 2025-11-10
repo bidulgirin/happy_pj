@@ -9,6 +9,8 @@ urlpatterns = [
     path("result/<int:id>/", views.result, name="result"),
     # 비디오크롤링
     path("vidio_solution/", views.vidio_solution, name="vidio_solution"),
+    # 책크롤링
+    path("book_solution/", views.book_solution, name="book_solution"),
     # 질문자동저장
     path("option_create/", views.option_create, name="option_create"),
     

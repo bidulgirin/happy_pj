@@ -1,6 +1,10 @@
 {% extends './common/common.html' %}
 {% load static %}
 {% block contents %}
+{% if request.user.is_superuser %}
+{% include './common/navi.html' %}
+{% endif %}
+
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <div class="startpage">
     <div class="title">

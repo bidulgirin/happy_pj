@@ -1,10 +1,14 @@
 {% extends './common/common.html' %}
 {% load static %}
-
 {% block contents %}
+{% if request.user.is_superuser %}
+{% include './common/navi.html' %}
+{% endif %}
 <div class="container">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <h3>솔루션데이터 크롤링하기 </h3>
+    <h1>솔루션데이터 크롤링하기 </h1>
+
+    <h3>유튜브 크롤링</h3>
     <form action="/vidio_solution/" method="POST">
         {% csrf_token %}
         <input type="text" name="keyword">
@@ -20,7 +24,22 @@
         </select>
         <button type="submit">수집하기</button>
     </form>
-
+    <h3>책크롤링</h3>
+    <form action="/book_solution/" method="POST">
+        {% csrf_token %}
+        <input type="text" name="keyword">
+        <select type="text" name="age">
+            <option value="10" selected>10대</option>
+            <option value="20">20대</option>
+            <option value="30">30대</option>
+            <option value="40">40대</option>
+            <option value="50">50대</option>
+            <option value="60">60대</option>
+            <option value="70">70대</option>
+            <option value="80">80대</option>
+        </select>
+        <button type="submit">수집하기</button>
+    </form>
     {% if result_datas.count > 0 %}
     <table>
         <thead>
@@ -41,5 +60,7 @@
         </tbody>
     </table>
     {% endif %}
+
+
 </div>
 {% endblock %}
