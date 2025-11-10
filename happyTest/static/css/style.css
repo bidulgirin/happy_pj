@@ -304,3 +304,10 @@ body:has(.result_report) {
         border-radius: 50%;
     }
 }
+.g_select {
+    border: 1px solid #dcdcdc;
+    padding: 1rem;
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+}

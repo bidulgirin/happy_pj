@@ -34,8 +34,9 @@
         <div class="main_test">
             <div class="content">
                 <h3>당신의 연령대는? </h3>
-                <select name="age">
-                    <option value="10" checked>10대</option>
+                <input type="radio" style="display: none;" checked disabled>
+                <select name="age" class="g_select">
+                    <option value="10" selected>10대</option>
                     <option value="20">20대</option>
                     <option value="30">30대</option>
                     <option value="40">40대</option>
@@ -145,12 +146,10 @@
         // 나이질문
         let age = document.querySelectorAll("select[name=age] option")
         let options = contents[currentIndex].querySelectorAll("input[type=radio]")
-        const selected = Array.from(age).some(i => i.selected);
-        console.log("selected", selected)
         const checked = Array.from(options).some(i => i.checked);
         // 해당 컨텐츠의 radio input 을 모두 가져온다
         // 선택된게 없으면
-        if (!checked & !selected) {
+        if (!checked) {
             Toastify({
                 text: "항목을 선택해주세요",
                 className: "alert",
