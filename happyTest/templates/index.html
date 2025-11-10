@@ -196,7 +196,7 @@
             return Number(score);
         }
 
-        total_score = [...document.querySelectorAll(`input:checked`)].reduce((acc, el) => acc + Number(el.value), 0);
+        console.log("total_score", total_score)
         const context = {
             age: 10,
             a_type_score: score("a"),
@@ -205,7 +205,6 @@
             d_type_score: score("d"),
             e_type_score: score("e"),
             f_type_score: score("f"),
-            total_score: total_score,
         };
 
         fetch("/save/1/", {

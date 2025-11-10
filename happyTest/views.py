@@ -61,8 +61,9 @@ def save(request, q_id):
         d = 0
         e = 0
         f = 0
-        
-        total_score = data["total_score"]
+        # 가중치 계산 안한거
+        total_score = a_type_score + b_type_score + c_type_score
+        # 가중치 계산된 버전 score
         final_total_score = a + b + c
         
         happy_test = HappyTest.objects.get(id=q_id)
@@ -126,7 +127,7 @@ def result(request, id):
          text = "행복지수가 보통이에요"
     # 좋음
     else:
-        text = "행복지수가 높아요"
+        text = "행복지수가 평균보다 높아요"
         
     a_type_low = None
     b_type_low = None

@@ -304,6 +304,7 @@ body:has(.result_report) {
         border-radius: 50%;
     }
 }
+
 .g_select {
     border: 1px solid #dcdcdc;
     padding: 1rem;

@@ -22,25 +22,31 @@
         <p>{{text}}</p>
 
         <canvas id="myChart"></canvas>
-
+        <div style="text-align: left; font-size:.8rem; color:rgb(206, 205, 255); margin-top:10px;">
+            생존: 건강 및 기본적인 생활 여건 만족도<br />
+            관계: 가족, 친구, 동료와의 사회적 유대감<br />
+            성장: 개인의 성장, 배움, 성취와 같이 자기 계발<br />
+        </div>
+        <hr>
         {% if a_type_low or b_type_low or c_type_low %}
-        특히
+
         {% endif %}
         {% if a_type_low %}
-        <b>{{a_type_low}}</b>
+        <b>"{{a_type_low}}"</b>
         {% endif %}
         {% if b_type_low %}
-        <b>{{b_type_low}}</b>
+        <b>"{{b_type_low}}"</b>
         {% endif %}
         {% if c_type_low %}
-        <b>{{c_type_low}}</b>
+        <b>"{{c_type_low}}"</b>
         {% endif %}
         {% if a_type_low or b_type_low or c_type_low %}
         지수가 평균보다 낮습니다
         {% endif %}
-        <p>💌추천 책💌</p>
+        <button class="ico_kakao">카카오톡 공유하기</button>
         <div class="solution_datas">
             {% if bookSolution.count > 0 %}
+            <p>💌추천 책💌</p>
             {% for i in bookSolution %}
             <a href="{{i.book_url|safe}}" data-aos="fade-up">
                 <div class="card">
@@ -53,20 +59,19 @@
             <script>
                 AOS.init();
             </script>
-            {% else %}
-            <div>
-                솔루션 데이터를 준비중입니다
-            </div>
             {% endif %}
         </div>
-
+        <hr>
 
     </div>
     <div class="solution">
-        <p class="title">행복을 위한 꿀팁!</p>
-        <p>✨추천 영상✨</p>
+
         <div class="solution_datas">
             {% if solutions.count > 0 %}
+            <div>
+                <p class="title">행복을 위한 꿀팁!</p>
+                <p>✨추천 영상✨</p>
+            </div>
             {% for i in solutions %}
             <a href="{{i.video_url|safe}}" data-aos="fade-up">
                 <div class="card">
@@ -82,10 +87,6 @@
             <script>
                 AOS.init();
             </script>
-            {% else %}
-            <div>
-                솔루션 데이터를 준비중입니다
-            </div>
             {% endif %}
         </div>
     </div>
@@ -113,6 +114,9 @@
     console.log("type_b", type_b)
     console.log("type_c", type_c)
 </script>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
+    integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
+    crossorigin="anonymous"></script>
 <script>
     const ctx = document.getElementById('myChart');
 
@@ -123,7 +127,7 @@
                 label: '행복지수',
                 data: [type_a, type_b, type_c]
             }],
-            labels: ['개인', '관계', '성장']
+            labels: ['생존', '관계', '성장']
         },
         options: {
             scales: {
@@ -135,6 +139,49 @@
         }
     });
 
+    // 공유하기
+    const url = window.location.href.replace('#', '');   	//현재 URL 획득
+    const encodedUrl = encodeURIComponent(url);		//URL 인코딩
+    const message = encodeURIComponent('공유하기 샘플이예요~');  //공유 타이틀 인코딩
+    const features = 'width=600, height=700, resizable=no'  //윈도우 사이즈
+    //출처: https://februaryfairys.tistory.com/132 [IT 성장일기:티스토리]
 
+    // NAVER
+    $('.ico_naver').click(function () {
+        window.open(`https://share.naver.com/web/shareView?url=${encodedUrl}&title=${message}`
+            , 'naver', features);
+    });
+    // KAKAO
+    const personalKey = '발급받은 Javascript 앱 키'
+    Kakao.init(personalKey); //KAKAO SDK 모듈 초기화
+    $('.ico_kakao').click(function () {
+        Kakao.Share.sendDefault({
+            objectType: 'feed',
+            content: {
+                title: '공유하기 샘플이예요~',
+                imageUrl: url + 'resources/images/kakao_share.png', //공유 시 표시될 이미지 리소스
+                link: {
+                    mobileWebUrl: url, //모바일의 경우 연결할 URL
+                    webUrl: url	//웹의 경우 연결할 URL
+                }
+            },
+            buttons: [
+                {
+                    title: '버튼 하나',
+                    link: {
+                        mobileWebUrl: url,
+                        webUrl: url
+                    }
+                },
+                {
+                    title: '버튼 둘',
+                    link: {
+                        mobileWebUrl: url,
+                        webUrl: url
+                    }
+                }
+            ]
+        });
+    });
 </script>
 {% endblock %}
