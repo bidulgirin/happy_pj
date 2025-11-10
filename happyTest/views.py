@@ -45,24 +45,25 @@ def start(request):
 def save(request, q_id):
     if request.method == "POST":
         data = json.loads(request.body)
-        print(data)
+        age = int(data["age"])
         a_type_score = int(data["a_type_score"])
         b_type_score = int(data["b_type_score"])
         c_type_score = int(data["c_type_score"])
-        d_type_score = int(data["d_type_score"])
-        e_type_score = int(data["e_type_score"])
-        f_type_score = int(data["f_type_score"])
+        # 사용안할듯
+        d_type_score = 0
+        e_type_score = 0
+        f_type_score = 0
         
         # 공식도출예시
-        a = a_type_score * 2
-        b = b_type_score * 3
-        c = c_type_score * 5
-        d = d_type_score * 1
-        e = e_type_score * 4
-        f = f_type_score * 6
+        a = a_type_score * 2.5 # 생존
+        b = b_type_score * 2.5 # 관계
+        c = c_type_score * 5 # 성장
+        d = 0
+        e = 0
+        f = 0
         
         total_score = data["total_score"]
-        final_total_score = a + b + c + d + e + f
+        final_total_score = a + b + c
         
         happy_test = HappyTest.objects.get(id=q_id)
         
@@ -99,45 +100,68 @@ def save(request, q_id):
 def result(request, id):
     result = Result.objects.get(id=id)
     age = 0
-    keyword = "인간관계"
     # 좋음 보통 나쁨으로 10대, 20대, 30대...에 따라 다른 데이터
+    keywords = []
     if result.age == 10:
-        pass
+        keywords = ["가족관계", "인간관계"]
     elif result.age == 20:
-        pass
+        keywords = ["스트레스", "인간관계"]
     elif result.age == 30:
-        pass
+        keywords = ["가족관계"]
     elif result.age == 40:
-        pass
+        keywords = ["가족관계"]
     elif result.age == 50:
-        pass
+        keywords = ["가족관계"]
     elif result.age == 60:
-        pass
-    elif result.age == 70:
-        pass
-    elif result.age >= 80:
-        pass
-        
+        keywords = ["가족관계"]
+    
+    # 평균 행복지수는 10점 만점에 5.94점에서 6.68점
+    
     # 나쁨
-    if result.total_score < 50:
+    if result.final_total_score < 59:
         text = "행복지수가 평균보다 낮아요"
         
     # 보통
-    elif result.total_score < 70 :
+    elif result.final_total_score < 66 :
          text = "행복지수가 보통이에요"
     # 좋음
     else:
         text = "행복지수가 높아요"
+        
+    a_type_low = None
+    b_type_low = None
+    c_type_low = None
     
+    book_keyword = []
+    # 개인 점수가 평균보다 낮을때
+    if result.final_a_type_score < int(5.94 * 2.5):
+        a_type_low = "개인"
+        book_keyword += ["건강","외모"]
+        
+    if result.final_b_type_score < int(5.94 * 2.5):
+        b_type_low = "관계"
+        book_keyword += ["인간관계","가족"]
+        
+    if result.final_c_type_score < int(5.94 * 5):
+        c_type_low = "성장"
+        book_keyword += ["성장"]
+        
     # 연령대별 키워드별 필터링
-    solution = VideoSolution.objects.all()[:20]
+    solution = VideoSolution.objects.filter(age=result.age, keyword__in=keywords).order_by('?')[:6]
+    # 책 정보를 넘긴다
+    bookSolution = BookSolution.objects.filter(keyword__in=book_keyword).order_by('?')[:2]
     
     
     # 결과에 따라 솔루션 데이터 달라짐
     context = {
         "result" : result,
-        "solutions" : solution,
+        "total_score" : int(result.final_total_score),
+        "solutions" : solution[:6],
+        "bookSolution" : bookSolution[:4],
         "text" : text,
+        "a_type_low" : a_type_low,
+        "b_type_low" : b_type_low,
+        "c_type_low" : c_type_low,
     }
     
     return render(request, "./result.html", context)
@@ -248,7 +272,7 @@ def vidio_solution(request):
                 print("악!")
                 
         # 모델에 한번에 저장 하이소
-        VideoSolution.objects.bulk_create(datas)
+        VideoSolution.objects.bulk_create(datas[:10]) # 용량부족하니까 10개로 잘라
         
         result_datas = VideoSolution.objects.filter(keyword=keyword)
         context = {
@@ -313,7 +337,7 @@ def book_solution(request):
             WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.ID, "exclAgeOver")))
             filter_element = driver.find_element(By.ID, "exclAgeOver")
             time.sleep(wait_time + 2)
-            filter_element.parent.click()
+            filter_element.click()
         except Exception as e:
             print(e)
 
@@ -322,7 +346,8 @@ def book_solution(request):
         try :
             elements = driver.find_element(By.CLASS_NAME, "filter_list_box").find_elements(By.ID, "recommend_category_filter")
             time.sleep(wait_time + 2)
-            elements[0].click()
+            if elements[0]:
+                elements[0].parent.click()
         except Exception as e:
             print(e)
 
@@ -351,7 +376,7 @@ def book_solution(request):
                     print("악!")
                     
             # 모델에 한번에 저장 하이소
-            BookSolution.objects.bulk_create(datas)
+            BookSolution.objects.bulk_create(datas[:10])
             
             result_datas = BookSolution.objects.filter(keyword=keyword)
 

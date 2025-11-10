@@ -34,7 +34,7 @@
         {% for i in question %}
         <div class="questions">
             <b>
-                질문 : {{i.id}}
+                {{ forloop.counter }}. 질문 (id:{{i.id}})
             </b>
             <form action="/quetion_update/{{i.id}}/" method="POST">
                 {% csrf_token %}
@@ -46,13 +46,13 @@
         </div>
         <div class="options">
             {% if i.options.count > 0 %}
-            {% for j in i.options.all %}
+            {% for j in i.options.all|dictsort:"id" %}
             <div>
-                {{j.id}}
+                옵션{{ forloop.counter }}.(id:{{j.id}}), (type:{{j.type}})
                 <form action="/option_update/{{j.id}}/" method="POST">
                     {% csrf_token %}
                     <input type="text" value="{{j.text}}" data-id="{{j.id}}" name="text">
-                    <input type="text" value="{{j.score}}" data-id="{{j.id}}" name="score">
+                    <input type="number" value="{{j.score}}" data-id="{{j.id}}" name="score" style="width: 30px;">
                     <button class="update" type="submit">수정</button>
                     <a class="deleted" href="/option_delete/{{j.id}}/">삭제</a>
                 </form>

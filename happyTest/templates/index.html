@@ -23,15 +23,29 @@
     <form id="HappyTest" method="POST">
         {% csrf_token %}
         <!-- 프로그래스바 -->
+        {% for q in question %}
+        {% endfor %}
+
         <div id="progress-container">
             <div id="progress-bar"></div>
+            <div class="progressing">1/10</div>
         </div>
-
         <!-- 질문 컨텐츠 -->
         <div class="main_test">
+            <div class="content">
+                <h3>당신의 연령대는? </h3>
+                <select name="age">
+                    <option value="10" checked>10대</option>
+                    <option value="20">20대</option>
+                    <option value="30">30대</option>
+                    <option value="40">40대</option>
+                    <option value="50">50대</option>
+                    <option value="60">60대이상</option>
+                </select>
+            </div>
             {% for q in question %}
             <div class="content">
-                <h3>Q. {{q.text}}</h3>
+                <h3>Q{{ forloop.counter }}. {{q.text}}</h3>
                 {% for i in q.options.all %}
                 <label for="{{i.pk}}">
                     <input type="radio" id="{{i.pk}}" name="{{i.type}}_{{q.id}}" value="{{i.score}}"
@@ -39,7 +53,6 @@
                     {{i.text}}<br />
                 </label>
                 {% endfor %}
-
             </div>
             {% endfor %}
             <!-- 버튼들 -->
@@ -63,10 +76,9 @@
         document.querySelector(`body`).style.backgroundColor = after_fill
         // 예쁘게 사라지세요~
         document.querySelector(".startpage").className += ' gone'
-
         setTimeout(function () {
             document.querySelector(".startpage").style.display = "none";
-        }, 1000);
+        }, 500);
 
     })
 
@@ -75,6 +87,7 @@
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
     const submitBtn = document.querySelector(".submit-btn");
+    const progressing = document.querySelector(".progressing");
 
     // 현재 내 페이지 알기
     let currentIndex = 0;
@@ -113,6 +126,7 @@
     function updateProgress(index) {
         const progress = (index / content_len) * 100;
         document.getElementById("progress-bar").style.width = progress + "%";
+        progressing.innerText = `${index + 1}/${content_len}`
     }
 
     // 이전 버튼 클릭
@@ -128,11 +142,15 @@
 
     // 다음 버튼 클릭
     nextBtn.addEventListener("click", () => {
+        // 나이질문
+        let age = document.querySelectorAll("select[name=age] option")
         let options = contents[currentIndex].querySelectorAll("input[type=radio]")
+        const selected = Array.from(age).some(i => i.selected);
+        console.log("selected", selected)
         const checked = Array.from(options).some(i => i.checked);
         // 해당 컨텐츠의 radio input 을 모두 가져온다
         // 선택된게 없으면
-        if (!checked) {
+        if (!checked & !selected) {
             Toastify({
                 text: "항목을 선택해주세요",
                 className: "alert",

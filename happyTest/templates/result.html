@@ -7,6 +7,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
     </script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 {% if request.user.is_superuser %}
@@ -16,17 +18,55 @@
 
     <div class="result_report">
         <h3 class="title"> 당신의 행복 점수는?</h3>
-        <h1>{{result.total_score}}점</h1>
+        <h1>{{total_score}}점</h1>
         <p>{{text}}</p>
+
         <canvas id="myChart"></canvas>
+
+        {% if a_type_low or b_type_low or c_type_low %}
+        특히
+        {% endif %}
+        {% if a_type_low %}
+        <b>{{a_type_low}}</b>
+        {% endif %}
+        {% if b_type_low %}
+        <b>{{b_type_low}}</b>
+        {% endif %}
+        {% if c_type_low %}
+        <b>{{c_type_low}}</b>
+        {% endif %}
+        {% if a_type_low or b_type_low or c_type_low %}
+        지수가 평균보다 낮습니다
+        {% endif %}
+        <p>💌추천 책💌</p>
+        <div class="solution_datas">
+            {% if bookSolution.count > 0 %}
+            {% for i in bookSolution %}
+            <a href="{{i.book_url|safe}}" data-aos="fade-up">
+                <div class="card">
+                    {% if i.cover_url %}
+                    <img src="{{i.cover_url|safe}}" class="card-img-top" alt="{{i.title|safe|truncatechars:30}}">
+                    {% endif %}
+                </div>
+            </a>
+            {% endfor %}
+            <script>
+                AOS.init();
+            </script>
+            {% else %}
+            <div>
+                솔루션 데이터를 준비중입니다
+            </div>
+            {% endif %}
+        </div>
+
+
     </div>
     <div class="solution">
         <p class="title">행복을 위한 꿀팁!</p>
         <p>✨추천 영상✨</p>
         <div class="solution_datas">
             {% if solutions.count > 0 %}
-            <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-            <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
             {% for i in solutions %}
             <a href="{{i.video_url|safe}}" data-aos="fade-up">
                 <div class="card">
@@ -69,15 +109,9 @@
     type_a = Number('{{result.final_a_type_score}}')
     type_b = Number('{{result.final_b_type_score}}')
     type_c = Number('{{result.final_c_type_score}}')
-    type_d = Number('{{result.final_d_type_score}}')
-    type_e = Number('{{result.final_e_type_score}}')
-    type_f = Number('{{result.final_f_type_score}}')
     console.log("type_a", type_a)
     console.log("type_b", type_b)
     console.log("type_c", type_c)
-    console.log("type_d", type_d)
-    console.log("type_e", type_e)
-    console.log("type_f", type_f)
 </script>
 <script>
     const ctx = document.getElementById('myChart');
@@ -86,16 +120,16 @@
         type: 'radar',
         data: {
             datasets: [{
-                label: 'First dataset',
-                data: [type_a, type_b, type_c, type_d, type_e, type_f]
+                label: '행복지수',
+                data: [type_a, type_b, type_c]
             }],
-            labels: ['a', 'b', 'c', 'd', 'e', 'f']
+            labels: ['개인', '관계', '성장']
         },
         options: {
             scales: {
                 r: {
                     suggestedMin: 0,
-                    suggestedMax: 30,
+                    suggestedMax: 50,
                 }
             }
         }

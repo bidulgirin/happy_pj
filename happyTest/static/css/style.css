@@ -97,11 +97,18 @@ body:has(.result_report) {
 }
 
 #progress-container {
+    position: relative;
     width: 100%;
     background: #eee;
     height: 20px;
     border-radius: 10px;
     margin-top: 10px;
+}
+/* 진행도 표기 */
+#progress-container .progressing {
+    position: absolute;
+    top: 0;
+    right: 10px;
 }
 
 #progress-bar {
