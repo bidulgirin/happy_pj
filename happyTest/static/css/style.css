@@ -168,11 +168,34 @@ body:has(.result_report) {
     text-decoration-line: none;
 }
 
+.solution_datas.book .card{
+    aspect-ratio: auto 1 / 1.5; 
+    overflow: hidden;
+}
+
+.solution_datas.video .card {
+    aspect-ratio: auto 1 / .5; 
+}
+
+.solution_datas.book a img{
+    display: block; /*img default display - inline-block*/
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.solution_datas.video .card-body{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .solution_datas > a .card {
     display: block;
     flex: 1;
     margin-bottom: 10px;
     transition: opacity 0.3s;
+    aspect-ratio: auto 2 / 1; 
 }
 .solution_datas > a .card-body {
     padding: 10px;

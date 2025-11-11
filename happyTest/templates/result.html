@@ -43,18 +43,17 @@
         {% if a_type_low or b_type_low or c_type_low %}
         지수가 평균보다 낮습니다
         {% endif %}
-        <button class="ico_kakao">카카오톡 공유하기</button>
-        <div class="solution_datas">
+        <p>💌추천 책💌</p>
+        <div class="solution_datas book">
             {% if bookSolution.count > 0 %}
-            <p>💌추천 책💌</p>
             {% for i in bookSolution %}
-            <a href="{{i.book_url|safe}}" data-aos="fade-up">
-                <div class="card">
-                    {% if i.cover_url %}
-                    <img src="{{i.cover_url|safe}}" class="card-img-top" alt="{{i.title|safe|truncatechars:30}}">
-                    {% endif %}
-                </div>
-            </a>
+                <a href="{{i.book_url|safe}}" data-aos="fade-up">
+                    <div class="card">
+                        {% if i.cover_url %}
+                        <img src="{{i.cover_url|safe}}" class="card-img-top" alt="{{i.title|safe|truncatechars:30}}">
+                        {% endif %}
+                    </div>
+                </a>
             {% endfor %}
             <script>
                 AOS.init();
@@ -65,24 +64,24 @@
 
     </div>
     <div class="solution">
-
-        <div class="solution_datas">
+        <div>
+            <p class="title">행복을 위한 꿀팁!</p>
+            <p>✨추천 영상✨</p>
+        </div>
+        <div class="solution_datas video">
             {% if solutions.count > 0 %}
-            <div>
-                <p class="title">행복을 위한 꿀팁!</p>
-                <p>✨추천 영상✨</p>
-            </div>
+            
             {% for i in solutions %}
-            <a href="{{i.video_url|safe}}" data-aos="fade-up">
-                <div class="card">
-                    {% if i.thumbnail_url %}
-                    <img src="{{i.thumbnail_url|safe}}" class="card-img-top" alt="...">
-                    {% endif %}
-                    <div class="card-body">
-                        <p class="card-title">{{i.title|safe|truncatechars:30}}</p>
+                <a href="{{i.video_url|safe}}" data-aos="fade-up">
+                    <div class="card">
+                        {% if i.thumbnail_url %}
+                        <img src="{{i.thumbnail_url|safe}}" class="card-img-top" alt="...">
+                        {% endif %}
+                        <div class="card-body">
+                            <p class="card-title">{{i.title|safe|truncatechars:30}}</p>
+                        </div>
                     </div>
-                </div>
-            </a>
+                </a>
             {% endfor %}
             <script>
                 AOS.init();
@@ -90,6 +89,8 @@
             {% endif %}
         </div>
     </div>
+    <button class="ico_kakao">카카오톡 공유하기</button>
+
 </div>
 <div class="area">
     <ul class="circles">
