@@ -162,12 +162,34 @@ body:has(.result_report) {
     gap: 1%;
     justify-content: center;
 }
+
+
 .solution_datas > a {
     width: 48%;
     text-decoration: none;
     text-decoration-line: none;
+    
 }
-
+.solution_datas .card{
+    position: relative;
+}
+.solution_datas .card .keyword_label{
+    position: absolute;
+    z-index: 10;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    text-align: left;
+    vertical-align: bottom;
+    color: #ffffff;
+    font-weight: bold;
+    opacity: 0.8;
+    text-indent: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    background-color: #0000003d;
+}
 .solution_datas.book .card{
     aspect-ratio: auto 1 / 1.5; 
     overflow: hidden;
@@ -188,6 +210,7 @@ body:has(.result_report) {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    overflow: hidden;
 }
 
 .solution_datas > a .card {

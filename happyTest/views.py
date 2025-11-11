@@ -106,22 +106,21 @@ def result(request, id):
     if result.age == 10:
         keywords = ["가족관계", "인간관계"]
     elif result.age == 20:
-        keywords = ["스트레스", "인간관계"]
+        keywords = ["취업/일", "재테크", "회사생활"]
     elif result.age == 30:
-        keywords = ["가족관계"]
+        keywords = ["회사생활", "재테크", "가족관계"]
     elif result.age == 40:
-        keywords = ["가족관계"]
+        keywords = ["재테크", "가족관계", "회사생활", "인간관계", "돈"]
     elif result.age == 50:
-        keywords = ["가족관계"]
+        keywords = ["재테크", "가족관계", "인간관계", "우울증", "건강"]
     elif result.age == 60:
-        keywords = ["가족관계"]
+        keywords = ["재테크", "가족관계", "인간관계", "우울증", "건강"]
     
     # 평균 행복지수는 10점 만점에 5.94점에서 6.68점
     
     # 나쁨
     if result.final_total_score < 59:
         text = "행복지수가 평균보다 낮아요"
-        
     # 보통
     elif result.final_total_score < 66 :
          text = "행복지수가 보통이에요"
@@ -133,10 +132,10 @@ def result(request, id):
     b_type_low = None
     c_type_low = None
     
-    book_keyword = []
+    book_keyword = ["성장"]
     # 개인 점수가 평균보다 낮을때
     if result.final_a_type_score < int(5.94 * 2.5):
-        a_type_low = "개인"
+        a_type_low = "생존"
         book_keyword += ["건강","외모"]
         
     if result.final_b_type_score < int(5.94 * 2.5):
@@ -145,7 +144,7 @@ def result(request, id):
         
     if result.final_c_type_score < int(5.94 * 5):
         c_type_low = "성장"
-        book_keyword += ["성장"]
+        book_keyword += ["성장", "건강"]
         
     # 연령대별 키워드별 필터링
     solution = VideoSolution.objects.filter(age=result.age, keyword__in=keywords).order_by('?')[:6]

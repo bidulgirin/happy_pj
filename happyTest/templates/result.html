@@ -15,7 +15,6 @@
 {% include './common/navi.html' %}
 {% endif %}
 <div class="container container-sm">
-
     <div class="result_report">
         <h3 class="title"> 당신의 행복 점수는?</h3>
         <h1>{{total_score}}점</h1>
@@ -23,26 +22,67 @@
 
         <canvas id="myChart"></canvas>
         <div style="text-align: left; font-size:.8rem; color:rgb(206, 205, 255); margin-top:10px;">
+            <b>Alderfer(1972)의 생존ㆍ관계ㆍ성장 욕구위계 이론</b><br />
             생존: 건강 및 기본적인 생활 여건 만족도<br />
             관계: 가족, 친구, 동료와의 사회적 유대감<br />
             성장: 개인의 성장, 배움, 성취와 같이 자기 계발<br />
         </div>
         <hr>
-        {% if a_type_low or b_type_low or c_type_low %}
+        <div style="text-align: left;">
+            {% if a_type_low %}
+                <b>"{{a_type_low}}"</b>
+            {% endif %}
+            {% if b_type_low %}
+                <b>"{{b_type_low}}"</b>
+            {% endif %}
 
-        {% endif %}
-        {% if a_type_low %}
-        <b>"{{a_type_low}}"</b>
-        {% endif %}
-        {% if b_type_low %}
-        <b>"{{b_type_low}}"</b>
-        {% endif %}
-        {% if c_type_low %}
-        <b>"{{c_type_low}}"</b>
-        {% endif %}
-        {% if a_type_low or b_type_low or c_type_low %}
-        지수가 평균보다 낮습니다
-        {% endif %}
+            {% if c_type_low %}
+                <b>"{{c_type_low}}"</b>
+            {% endif %}
+            {% if a_type_low or b_type_low or c_type_low %}
+                지수가 평균보다 낮습니다. <br>
+            {% endif %}
+
+               {% if a_type_low %}
+                당신이 삶을 살아가는 데 있어 금전적 여유가 없거나
+                외모, 건강등의 문제에 시달리고 있을 가능성이 있습니다.
+                <br /><br />
+                <!-- 평균과 점수 비교하기 위한 막대 그래프 표현 -->
+                <div id="a_type_chart"></div>
+                삶의 안정성을 위해 <b>개인이 할 수 있는 행동</b>을 제시해드릴께요<br /><br />
+                1. 운동하기 <br />
+                2. 나라지원정보 <br />
+                3. 심리상담<br />
+            {% endif %}
+            
+            {% if b_type_low %}
+                당신의 주위 인물들과의 관계를 유지하기 어렵고 
+                타인에게 받는 피드백이 부정적이다고 추정 할 수 있습니다.
+                <br /><br />
+                <!-- 평균과 점수 비교하기 위한 막대 그래프 표현 -->
+                <div id="b_type_chart"></div>
+                주위와의 관계를 위해 개인이 할 수 있는 실천을 추천해드릴께요<br /><br />
+                1. 심리학 공부 <br />
+                2. 마음 다스리기(명상) <br />
+                3. 새로운 자아 만들기 <br />
+
+            {% endif %}
+            {% if c_type_low %}
+                지금까지 살아온 자신의 삶에 대한 자부심, 
+                삶을 살아가는데 전반적으로 만족도가 높지 않다는 사실을 반영합니다.
+                <br /><br />
+                <!-- 평균과 점수 비교하기 위한 막대 그래프 표현 -->
+                <div id="c_type_chart"></div>
+                삶의 만족도를 위해 개인이 할 수 있는 실천을 추천해드릴께요<br /><br />
+                1. 자기계발 관련 책 읽기 <br />
+                2. 작은 성취이루기(방청소) <br />
+                3. 마음 다스리기<br />
+            {% endif %}
+        </div>
+        <hr>
+
+
+        <p class="title">행복을 위한 꿀팁!</p>
         <p>💌추천 책💌</p>
         <div class="solution_datas book">
             {% if bookSolution.count > 0 %}
@@ -52,6 +92,7 @@
                         {% if i.cover_url %}
                         <img src="{{i.cover_url|safe}}" class="card-img-top" alt="{{i.title|safe|truncatechars:30}}">
                         {% endif %}
+                        <div class="keyword_label">{{i.keyword}}</div>
                     </div>
                 </a>
             {% endfor %}
@@ -60,12 +101,9 @@
             </script>
             {% endif %}
         </div>
-        <hr>
-
     </div>
     <div class="solution">
         <div>
-            <p class="title">행복을 위한 꿀팁!</p>
             <p>✨추천 영상✨</p>
         </div>
         <div class="solution_datas video">
